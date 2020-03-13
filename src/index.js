@@ -18,7 +18,7 @@ app.use((req, res, next) => {
 
     // authorized headers for preflight requests
     // https://developer.mozilla.org/en-US/docs/Glossary/preflight_request
-    res.header('Access-Control-Allow-Headers', 'origin, content-type, accept');
+    res.header('Access-Control-Allow-Headers', 'origin, content-type, accept, authorization');
 
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     next();
@@ -33,10 +33,9 @@ app.use(
 app.use('/movies', moviesRouter);
 app.use('/comments', commentsRouter);
 app.use('/auth', authRouter);
-
-app.use(jwt({secret: config.secret}));
-
 app.use('/users', usersRouter);
+
+
 app.listen(port, () => {
     console.log(`App running on port ${port}.`)
 });

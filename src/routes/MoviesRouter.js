@@ -1,5 +1,6 @@
 const {BaseRouter} = require("./BaseRouter");
 const {add, update, remove, get, getById} = require('../controllers/moviesController');
+const {withAccess} = require('../controllers/authController');
 
 class MoviesRouter extends BaseRouter {
     constructor() {
@@ -9,9 +10,9 @@ class MoviesRouter extends BaseRouter {
     init() {
         this.router.get('/', get);
         this.router.get('/:id', getById);
-        this.router.post('/', add);
-        this.router.put('/:id', update);
-        this.router.delete('/:id', remove);
+        this.router.post('/', withAccess([1]), add);
+        this.router.put('/:id', withAccess([1]), update);
+        this.router.delete('/:id', withAccess([1]), remove);
     }
 }
 

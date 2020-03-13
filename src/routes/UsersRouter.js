@@ -1,4 +1,5 @@
 const {BaseRouter} = require("./BaseRouter");
+const {withAccess} = require('../controllers/authController');
 const {addRequest, update, remove, get, getByIdRequest} = require('../controllers/usersController');
 
 class UsersRouter extends BaseRouter {
@@ -7,17 +8,11 @@ class UsersRouter extends BaseRouter {
     }
 
     init() {
-        this.router.get('/', function(req, res, next) {
-            if(req.user.id === 13) {
-                next();
-            } else {
-                res.sendStatus(401);
-            }
-        }, get);
+        this.router.get('/', get);
         this.router.get('/:id', getByIdRequest);
-        this.router.post('/', addRequest);
-        this.router.put('/:id', update);
-        this.router.delete('/:id', remove);
+        this.router.post('/', withAccess([1]), addRequest);
+        this.router.put('/:id', withAccess([1]), update);
+        this.router.delete('/:id', withAccess([1]), remove);
     }
 }
 

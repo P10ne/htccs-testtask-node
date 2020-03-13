@@ -7,12 +7,14 @@ const addRequest = async (req, res) => {
     sendJSONresponse(res, 200, addedUser);
 };
 const add = async (payload) => {
+    payload.login = payload.login.toLowerCase();
     payload.password = bcript.hashSync(payload.password, 10);
     return Users.create(payload);
 };
 
 const update = async (req, res) => {
     const received = req.body;
+    received.login = received.login.toLowerCase();
     if(received.password === '') {
         const toUpdateFromDB = await Users.findByPk(req.params.id);
         const oldPassword = toUpdateFromDB.password;
@@ -49,9 +51,9 @@ const getUserByLoginRequest = async (req, res) => {
    sendJSONresponse(res, 200, user);
 };
 
-const getUserByLogin = (login, attributes = ['id', 'login']) => {
-    const user = Users.findOne({
-        where: {login},
+const getUserByLogin = async (login, attributes = ['id', 'login']) => {
+    const user = await Users.findOne({
+        where: {login: login.toLowerCase()},
         attributes,
         include: [Roles]
     });
@@ -75,5 +77,5 @@ const getById = (id, attributes = ['id', 'login']) => {
 
 
 module.exports = {
-    addRequest, update, remove, get, getByIdRequest, getUserByLogin
+    addRequest, update, remove, get, getByIdRequest, getById, getUserByLogin
 };

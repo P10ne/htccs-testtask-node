@@ -1,5 +1,5 @@
 const {BaseRouter} = require('./BaseRouter');
-const {login} = require('../controllers/authController');
+const {login, logout, refresh} = require('../controllers/authController');
 
 class AuthRouter extends BaseRouter {
     constructor() {
@@ -8,6 +8,8 @@ class AuthRouter extends BaseRouter {
 
     init() {
         this.router.post('/login', login);
+        this.router.post('/logout', logout)
+        this.router.post('/refresh', refresh);
     }
 }
 

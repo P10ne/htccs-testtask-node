@@ -23,7 +23,7 @@ const Movies = sequelize.define("movie", {
     year: {
         type: Sequelize.INTEGER
     },
-    imgSrc: {
+    preview: {
         type: Sequelize.STRING
     }
 });
@@ -70,9 +70,26 @@ const Roles = sequelize.define("role", {
 Users.belongsTo(Roles);
 Roles.hasMany(Users);
 
+const Tokens = sequelize.define("token", {
+    id: {
+        type: Sequelize.STRING,
+        primaryKey: true,
+        allowNull: false
+    },
+    expiresAt: {
+        type: Sequelize.BIGINT
+    },
+    token: {
+        type: Sequelize.STRING
+    }
+});
+Tokens.belongsTo(Users);
+Users.hasMany(Tokens);
+
 module.exports = {
     Movies,
     Comments,
     Users,
-    Roles
+    Roles,
+    Tokens
 };

@@ -1,6 +1,7 @@
 const {BaseRouter} = require("./BaseRouter");
 const {withAccess} = require('../controllers/authController');
 const {addRequest, update, remove, get, getByIdRequest} = require('../controllers/usersController');
+const {ACCESS_RIGHTS} = require('../config/roles');
 
 class UsersRouter extends BaseRouter {
     constructor() {
@@ -10,9 +11,9 @@ class UsersRouter extends BaseRouter {
     init() {
         this.router.get('/', get);
         this.router.get('/:id', getByIdRequest);
-        this.router.post('/', withAccess([1]), addRequest);
-        this.router.put('/:id', withAccess([1]), update);
-        this.router.delete('/:id', withAccess([1]), remove);
+        this.router.post('/', withAccess(ACCESS_RIGHTS.users.add), addRequest);
+        this.router.put('/:id', withAccess(ACCESS_RIGHTS.users.update), update);
+        this.router.delete('/:id', withAccess(ACCESS_RIGHTS.users.remove), remove);
     }
 }
 

@@ -2,7 +2,7 @@ const {Movies} = require('../models/models');
 const {sendJSONresponse} = require('../utils/utils');
 const multer = require('multer');
 
-const previewsDir = 'http://localhost:3000/uploads/';
+const previewsDir = 'http://localhost:4000/uploads/';
 
 const add = async (req, res) => {
     let previewName = '';

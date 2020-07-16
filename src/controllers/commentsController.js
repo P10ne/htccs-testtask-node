@@ -1,4 +1,4 @@
-const {Comments} = require('../models/models');
+const {Comments, Users} = require('../models/models');
 const {sendJSONresponse} = require('../utils/utils');
 
 const add = async (req, res) => {
@@ -14,7 +14,19 @@ const remove = async (req, res) => {
     sendJSONresponse(res, 200, deletedComment);
 };
 const get = async (req, res) => {
-    const comments = await Comments.findAll({where: {movie_id: req.query.movieid}});
+    const comments = await Comments.findAll(
+        {
+            where: {
+                movieId: req.query.movieId,
+            },
+            attributes: ['id', 'value'],
+            include: [
+                {
+                    model: Users,
+                    attributes: ['id', 'login']
+                }
+            ]
+        });
     sendJSONresponse(res, 200, comments);
 };
 const getById = async (req, res) => {

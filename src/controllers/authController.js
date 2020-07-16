@@ -3,6 +3,7 @@ const {compareSync} = require('bcryptjs');
 const {sendJSONresponse, sendErrorResponse} = require('../utils/utils');
 const usersCtrl = require('../controllers/usersController');
 const {secret, tokens} = require('../config/config');
+const {ACCESS_RIGHTS, ROLES} = require('../config/roles');
 const uuid = require('uuid/v4');
 const jwt = require('jsonwebtoken');
 const tokenCtrl = require('./tokensController');
@@ -95,7 +96,7 @@ const logout = (req, res) => {
     sendJSONresponse(res, 200, 'success');
 };
 
-const withAccess = (roles) => {
+const withAccess = (allowedRoles) => {
     return (req, res, next) => {
         const token = req.headers.authorization  && req.headers.authorization.replace('Bearer ', '');
         if (token) {
@@ -104,21 +105,32 @@ const withAccess = (roles) => {
                     console.log('Ошибка в verify', err);
                     sendErrorResponse(res, 401, 'Недействительный токен');
                 } else {
-                    console.log('roleId: ', decoded.roleId);
-                    if (roles.includes(decoded.roleId)) {
+                    if (checkAccess(allowedRoles, decoded.roleId)) {
                         console.log('успех');
                         next();
                     } else {
                         console.log('not includes');
-                        sendErrorResponse(res, 401, 'Недействительный токен');
+                        sendErrorResponse(res, 403, 'Нет прав доступа');
                     }
                 }
             });
         } else {
-            console.log('Недействительный токен');
-            sendErrorResponse(res, 401, 'Недействительный токен');
+            if (checkAccess(allowedRoles, ROLES.GUEST) || checkAccess(allowedRoles, ROLES.OWN_ROLE)) {
+                console.log('Пропущен как GUEST или OWN_ROLE');
+                next();
+            } else {
+                console.log('Недействительный токен');
+                sendErrorResponse(res, 401, 'Недействительный токен');
+            }
         }
     }
+};
+
+const checkAccess = (allowedRoles, roleId) => {
+    if (allowedRoles.includes(roleId)) {
+        return true;
+    }
+    return false;
 };
 
 

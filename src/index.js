@@ -9,9 +9,11 @@ const jwt = require('express-jwt');
 const app = express();
 const {sendJSONrespone, sendErrorResponse} = require('./utils/utils');
 
-const port = 3000;
+const port = 4000;
+const dir = '/api';
 
 app.use('/uploads', express.static(`${__dirname}/uploads`));
+app.use('/images', express.static(`${__dirname}/images`));
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -30,10 +32,10 @@ app.use(
     })
 );
 
-app.use('/movies', moviesRouter);
-app.use('/comments', commentsRouter);
-app.use('/auth', authRouter);
-app.use('/users', usersRouter);
+app.use(`${dir}/movies`, moviesRouter);
+app.use(`${dir}/comments`, commentsRouter);
+app.use(`${dir}/auth`, authRouter);
+app.use(`${dir}/users`, usersRouter);
 
 
 app.listen(port, () => {

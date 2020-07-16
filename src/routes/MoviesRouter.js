@@ -1,5 +1,6 @@
 const {BaseRouter} = require("./BaseRouter");
 const {add, update, remove, get, getById} = require('../controllers/moviesController');
+const {ACCESS_RIGHTS} = require('../config/roles');
 const {withAccess} = require('../controllers/authController');
 
 class MoviesRouter extends BaseRouter {
@@ -8,11 +9,11 @@ class MoviesRouter extends BaseRouter {
     }
 
     init() {
-        this.router.get('/', get);
-        this.router.get('/:id', getById);
-        this.router.post('/', withAccess([1]), add);
-        this.router.put('/:id', withAccess([1]), update);
-        this.router.delete('/:id', withAccess([1]), remove);
+        this.router.get('/', withAccess(ACCESS_RIGHTS.movies.get), get);
+        this.router.get('/:id', withAccess(ACCESS_RIGHTS.movies.get), getById);
+        this.router.post('/', withAccess(ACCESS_RIGHTS.movies.add), add);
+        this.router.put('/:id', withAccess(ACCESS_RIGHTS.movies.update), update);
+        this.router.delete('/:id', withAccess(ACCESS_RIGHTS.movies.remove), remove);
     }
 }
 

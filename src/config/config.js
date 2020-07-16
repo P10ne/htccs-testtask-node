@@ -2,10 +2,10 @@ module.exports = {
   secret: 'SECRET_KEY',
   tokens: {
     access: {
-      expiresIn: 180 // seconds
+      expiresIn: 15 * 60 // seconds
     },
     refresh: {
-      expiresIn: 300 // seconds
+      expiresIn: 30 * 24 * 60 * 60 // seconds
     }
   }
 };

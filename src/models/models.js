@@ -40,6 +40,9 @@ const Comments = sequelize.define("comment", {
     }
 });
 
+Comments.belongsTo(Movies);
+Movies.hasMany(Comments);
+
 const Users = sequelize.define("user", {
    id: {
        type: Sequelize.INTEGER,
@@ -54,6 +57,9 @@ const Users = sequelize.define("user", {
        type: Sequelize.STRING
     }
 });
+
+Comments.belongsTo(Users);
+Users.hasMany(Comments);
 
 const Roles = sequelize.define("role", {
    id: {

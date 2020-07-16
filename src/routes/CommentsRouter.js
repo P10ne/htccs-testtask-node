@@ -1,5 +1,7 @@
 const {BaseRouter} = require("./BaseRouter");
 const {get, getById, add, remove, update} = require('../controllers/commentsController');
+const {roles, OWN_ROLE, ALL_ROLES} = require('../config/roles');
+const {withAccess} = require('../controllers/authController');
 
 class CommentsRouter extends BaseRouter {
     constructor() {
@@ -7,11 +9,10 @@ class CommentsRouter extends BaseRouter {
     }
 
     init() {
-        this.router.get('/', get);
-        this.router.get('/:id', getById);
-        this.router.post('/', add);
-        this.router.put('/:id', update);
-        this.router.delete('/:id', remove);
+        this.router.get('/', withAccess(ALL_ROLES), get);
+        this.router.get('/:id', withAccess(ALL_ROLES), getById);
+        this.router.post('/', withAccess([1, 2]), add);
+        this.router.delete('/:id', withAccess([1, OWN_ROLE]), remove);
     }
 }
 
